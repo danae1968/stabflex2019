@@ -1,0 +1,120 @@
+function [statmatDev,statmatRT,statmatSZ]=perfromanceCW(varargin)
+
+%[data]=performanceforR(0,0);
+% subNo = subject number
+% Type 0 = ignore (distractoer resistance working memory trials); Type 2 = update (flexible updating working memory trials)
+% sz = set size: 1-4 items to be remembered
+
+subNr=1:22;
+saveD=0;
+% projectDir='P:\3017048.04';
+% analysisDir=fullfile(projectDir,'code','Colorwheel');
+% resultsDir=fullfile(projectDir,'results','Colorwheel');
+
+switch nargin
+    case 1
+        saveD=varargin{1};
+        %[data]=load(fullfile(resultsDir,dataName));
+    case 2
+        saveD=varargin{1};
+        subNr=varargin{2};
+        %[data]=load(fullfile(resultsDir,dataName));
+    case 3
+        saveD=varargin{1};
+        subNr=varargin{2};
+        [data]=varargin{3};
+    case 4
+        saveD=varargin{1};
+        subNr=varargin{2};
+        [data]=varargin{3};
+        io=varargin{4};
+end
+
+dataName=sprintf('performanceRBeh%d',max(subNr));
+
+subNo=data(:,1);dev=data(:,2);rt=data(:,3);sz=data(:,4);type=data(:,5);lure=data(:,6);
+loup=1;
+for i=subNr
+    Ignore(loup)=nanmedian(dev(subNo==i & type==0));
+    Update(loup)=nanmedian(dev(subNo==i & type==2));
+    IgnoreRT(loup)=nanmedian(rt(subNo==i & type==0));
+    UpdateRT(loup)=nanmedian(rt(subNo==i & type==2));
+   
+    IgnoreL(loup)=nanmedian(lure(subNo==i & type==0));
+    UpdateL(loup)=nanmedian(lure(subNo==i & type==2));
+
+          
+    sz1(loup)=nanmedian(dev(subNo==i &  sz==1)); %Ignore, set size 1, session 1; calculating median while ignoring NaN values
+    sz2(loup)=nanmedian(dev(subNo==i &  sz==2));
+    sz3(loup)=nanmedian(dev(subNo==i &  sz==3));
+    sz4(loup)=nanmedian(dev(subNo==i &  sz==4));
+    
+    sz1L(loup)=nanmedian(lure(subNo==i &  sz==1)); %Ignore, set size 1, session 1; calculating median while ignoring NaN values
+    sz2L(loup)=nanmedian(lure(subNo==i &  sz==2));
+    sz3L(loup)=nanmedian(lure(subNo==i &  sz==3));
+    sz4L(loup)=nanmedian(lure(subNo==i &  sz==4));  
+    
+    
+    I1(loup)=nanmedian(dev(subNo==i & type==0 & sz==1)); %Ignore, set size 1, session 1; calculating median while ignoring NaN values
+    I2(loup)=nanmedian(dev(subNo==i & type==0 & sz==2));
+    I3(loup)=nanmedian(dev(subNo==i & type==0 & sz==3));
+    I4(loup)=nanmedian(dev(subNo==i & type==0 & sz==4));
+    
+    U1(loup)=nanmedian(dev(subNo==i & type==2 & sz==1));
+    U2(loup)=nanmedian(dev(subNo==i & type==2 & sz==2));
+    U3(loup)=nanmedian(dev(subNo==i & type==2 & sz==3));
+    U4(loup)=nanmedian(dev(subNo==i & type==2 & sz==4));
+    
+    I1RT(loup)=nanmedian(rt(subNo==i & type==0 & sz==1));
+    I2RT(loup)=nanmedian(rt(subNo==i & type==0 & sz==2));
+    I3RT(loup)=nanmedian(rt(subNo==i & type==0 & sz==3));
+    I4RT(loup)=nanmedian(rt(subNo==i & type==0 & sz==4));
+    
+    
+    U1RT(loup)=nanmedian(rt(subNo==i & type==2 & sz==1));
+    U2RT(loup)=nanmedian(rt(subNo==i & type==2 & sz==2));
+    U3RT(loup)=nanmedian(rt(subNo==i & type==2 & sz==3));
+    U4RT(loup)=nanmedian(rt(subNo==i & type==2 & sz==4));
+    
+    I1L(loup)=nanmedian(lure(subNo==i & type==0 & sz==1)); %Ignore, set size 1, session 1; calculating median while ignoring NaN values
+    I2L(loup)=nanmedian(lure(subNo==i & type==0 & sz==2));
+    I3L(loup)=nanmedian(lure(subNo==i & type==0 & sz==3));
+    I4L(loup)=nanmedian(lure(subNo==i & type==0 & sz==4));
+    
+    U1L(loup)=nanmedian(lure(subNo==i & type==2 & sz==1));
+    U2L(loup)=nanmedian(lure(subNo==i & type==2 & sz==2));
+    U3L(loup)=nanmedian(lure(subNo==i & type==2 & sz==3));
+    U4L(loup)=nanmedian(lure(subNo==i & type==2 & sz==4));   
+    
+    loup=loup+1;
+end
+
+statmatDev=[I1' I2' I3' I4' U1' U2' U3' U4'];
+statmatLure=[I1L' I2L' I3L' I4L' U1L' U2L' U3L' U4L'];
+statmatRT=[I1RT' I2RT' I3RT' I4RT' U1RT' U2RT' U3RT' U4RT'];
+statmatSZ=[sz1' sz2' sz3' sz4'];
+statmatSZLure=[sz1L' sz2L' sz3L' sz4L'];
+names={'subNo' 'I1' 'I2' 'I3' 'I4' 'U1' 'U2' 'U3' 'U4'};
+namesAc={'subNo' 'Ignore' 'Update'};
+
+devAc=[Ignore' Update'];
+rtAc=[IgnoreRT' UpdateRT'];
+%Save data: the range should change based on number of subjects
+if saveD
+    devName=fullfile(io.resultsDir,sprintf('MedianAcc%d.xlsx',max(subNr)));
+    rtName=fullfile(io.resultsDir,sprintf('MedianRT%d.xlsx',max(subNr)));
+    xlswrite(devName,names,1,'A1:I1')
+    xlswrite(devName,[subNr' statmatDev],1,'A2')
+    xlswrite(devName,namesAc,2,'A1:C1')
+    xlswrite(devName,[subNr' devAc],2,'A2')
+    
+    
+    xlswrite(rtName,names,1,'A1:I1')
+    xlswrite(rtName,[subNr' statmatRT],1,'A2')
+    xlswrite(rtName,namesAc,2,'A1:C1')
+    xlswrite(rtName,[subNr' rtAc],2,'A2')    
+end
+
+
+
+
