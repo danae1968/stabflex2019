@@ -22,7 +22,7 @@ switch nargin
         type=varargin{2};
 end
 
-%% section added to retrieve lure angle in degrees
+%% section added to retrieve lure angle in degrees because this was not given directly in the output structure
 numWheelColors=512;
 
 %define colors in RGB values
@@ -41,9 +41,7 @@ addpath(io.dataDir,io.analysisDir)
 cd(io.dataDir);
 
 for j=subNr
-    if io.experiment==1
-        participant=fullfile(io.dataDir,sprintf('ColorFun_s%d.mat',j));
-    else
+ 
         subdir=fullfile(io.dataDir,sprintf('Colorwheel_sub_%d',j));
         
         % type=1 for training and type=2 for redo
@@ -53,7 +51,7 @@ for j=subNr
             case 2
                 participant=(fullfile(subdir,sprintf('ColorFun_s%d_Redo.mat',j)));
         end
-    end
+    
     
     load(participant)
     
@@ -61,7 +59,7 @@ for j=subNr
         for y=1:size(data,2)
             data(x,y).respDif=abs(data(x,y).respDif);
             switch type
-                case 1
+                case 1 % main task data
                     
                     %% added to retrieve lure angle
                     % colortheta is a structure with number of Colors fields linking "color" to "angle" of presentation
@@ -92,7 +90,7 @@ for j=subNr
                     end
                     %% generate matrix
                     performanceR=[performanceR;j data(x,y).respDif data(x,y).rt data(x,y).setsize data(x,y).type trial(x,y).probeColNum data(x,y).lureDif data(x,y).thetaCorrect data(x,y).tau thetaLure signedDev];
-                case 2
+                case 2 % for redo data 
                     
                     performanceR=[performanceR;j data(x,y).respDif data(x,y).rt data(x,y).setsize data(x,y).type data(x,y).lureDif];
                     
@@ -112,8 +110,12 @@ for j=subNr
     
     
     if saveD
-        filename=fullfile(io.resultsDir,'performanceRBeh%d.csv');
-        csvwrite(filename,performanceR)
+        if type==1
+        filename=fullfile(io.resultsDir,'performanceRBeh.csv');
+        elseif type==2
+                  filename=fullfile(io.resultsDir,'performanceRBehRedo.csv');
+        end
+            csvwrite(filename,performanceR)
     end
     
 end

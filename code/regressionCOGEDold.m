@@ -1,4 +1,4 @@
-function [IPmatrix,normSV, AUC]=regressionChoicesNoRedo(varargin)
+function [IPmatrix]=regressionCOGED(data,perRedo,varargin)
 %% plots for pilot 2 choice data per participant showing amounts on the x axis and
 % choice between easy and hard on the y axis. Running this function will
 % also save the plots on cwp. IPmatrix is an 11*6 matrix, every row is a
@@ -15,28 +15,27 @@ function [IPmatrix,normSV, AUC]=regressionChoicesNoRedo(varargin)
 % end
 
 
+switch nargin
+    case 2
+ saveD=0;
+ doPlots=0;
+ subNo=1:62;
+    case 3
+io=varargin{1};
+saveD=io.saveD;
+doPlots=io.doPlots;
+subNo=io.subNo;
+
+end
+
+% no redo (no effort) offers
 easyOffer=[0.1 round((0.2:0.2:2.2)*10)/10];
 hardOffer=2;
 maxValue=max(easyOffer);
 minValue=min(easyOffer);
-saveD=0;
-doPlots=0;
 
-switch nargin
-    case 2
-       saveD=varargin{1};
-       doPlots=varargin{2};
-    case 3
-       saveD=varargin{1};
-       doPlots=varargin{2};
-       subNo=varargin{3};
-    case 4
-       saveD=varargin{1};
-       doPlots=varargin{2};
-       subNo=varargin{3};
-       io=varargin{4};
-end
-    
+loop=1;
+subNo=data(:,1);cond=data(:,2);sz=data(:,3);offer=data(:,4);choice=data(:,5);rt=data(:,6);block=data(:,7);
 
 for i=subNo
     
@@ -53,31 +52,27 @@ for i=subNo
     Ignore=[];taskValue=[];
     Update=[];
     
-if io.original
-        participant=(fullfile(io.dataDir,sprintf('ColorFunChoice_s%d.mat',i)));
-
-else
-    
     subdir=fullfile(io.dataDir,sprintf('Choices_sub_%d',i));
     participant=(fullfile(subdir,sprintf('ColorFunChoice_s%d.mat',i)));
-end
     load(participant)
     
-    %% 1,2,3 of hard task represents ignore with increasing set size and 4,5,6 update
-    %%regarding choices 1 represents easy and 2 difficult
+    %% typeTask: variable coding for condition and set size of given trial.
+    %%1,2,3  represents ignore with increasing set size and 4,5,6 update
+    %%Choice: 1 represents choosing easy and 2 choosing hard offer
     
     for n=1:length(data.typeTask)
-        if data.version(n)==1
+        if data.version(n)==1 % task vs no effort choices
+            
             %data are made in 0,1 way.
             if data.choice(n)==2
                 data.choice(n)=0;
                 
             end
+            %replace 9 with NaN when participant did not respond
             if data.choice(n)==9
                 data.choice(n)=NaN;
             end
             
-%             if data.choice(n)~=9
                 switch data.typeTask(n)
                     case 1
                         Isz1=[Isz1;data.easyOffer(n)];
@@ -136,17 +131,17 @@ end
     
     
     %% Regression analyses
-    [yfitI,IPI(i),betasI(i,:)]=RegressionAnalysis(Ignore,yI,minValue,maxValue);
-    [yfitU,IPU(i),betasU(i,:)]=RegressionAnalysis(Update,yU,minValue,maxValue);
-    [yfit1,IP1(i),betas1(i,:)]=RegressionAnalysis(Isz1,yI1,minValue,maxValue);
-    [yfit2,IP2(i),betas2(i,:)]=RegressionAnalysis(Isz2,yI2,minValue,maxValue);
-    [yfit3,IP3(i),betas3(i,:)]=RegressionAnalysis(Isz3,yI3,minValue,maxValue);
-    [yfit4,IP4(i),betas4(i,:)]=RegressionAnalysis(Isz4,yI4,minValue,maxValue);
-    [yfit5,IP5(i),betas5(i,:)]=RegressionAnalysis(Usz1,yU1,minValue,maxValue);
-    [yfit6,IP6(i),betas6(i,:)]=RegressionAnalysis(Usz2,yU2,minValue,maxValue);
-    [yfit7,IP7(i),betas7(i,:)]=RegressionAnalysis(Usz3,yU3,minValue,maxValue);
-    [yfit8,IP8(i),betas8(i,:)]=RegressionAnalysis(Usz4,yU4,minValue,maxValue);
-    [yfitTask,IPtask(i)]=RegressionAnalysis(taskValue,yTask,minValue,maxValue);
+    [yfitI,IPI(loop),betasI(loop,:)]=RegressionAnalysis(Ignore,yI,minValue,maxValue);
+    [yfitU,IPU(loop),betasU(loop,:)]=RegressionAnalysis(Update,yU,minValue,maxValue);
+    [yfit1,IP1(loop),betas1(loop,:)]=RegressionAnalysis(Isz1,yI1,minValue,maxValue);
+    [yfit2,IP2(loop),betas2(loop,:)]=RegressionAnalysis(Isz2,yI2,minValue,maxValue);
+    [yfit3,IP3(loop),betas3(loop,:)]=RegressionAnalysis(Isz3,yI3,minValue,maxValue);
+    [yfit4,IP4(loop),betas4(loop,:)]=RegressionAnalysis(Isz4,yI4,minValue,maxValue);
+    [yfit5,IP5(loop),betas5(loop,:)]=RegressionAnalysis(Usz1,yU1,minValue,maxValue);
+    [yfit6,IP6(loop),betas6(loop,:)]=RegressionAnalysis(Usz2,yU2,minValue,maxValue);
+    [yfit7,IP7(loop),betas7(loop,:)]=RegressionAnalysis(Usz3,yU3,minValue,maxValue);
+    [yfit8,IP8(loop),betas8(loop,:)]=RegressionAnalysis(Usz4,yU4,minValue,maxValue);
+    [yfitTask,IPtask(loop)]=RegressionAnalysis(taskValue,yTask,minValue,maxValue);
     
     
     IPmatrixAll=[IPI' IPU' IPtask' IP1',IP2',IP3',IP4',IP5',IP6',IP7',IP8'];
@@ -181,8 +176,9 @@ a6=unique([Usz2, yfit6],'rows');
 a7=unique([Usz3, yfit7],'rows');
 a8=unique([Usz4, yfit8],'rows');
 % 
-
-saI(i,:)=aI(:,2)';saU(i,:)=aU(:,2)';
+ bI=unique([Ignore,yI],'rows');
+ bU=unique([Update,yU],'rows');
+saI(loop,:)=aI(:,2)';saU(loop,:)=aU(:,2)';
 msaI=mean(saI);msaU=mean(saU);
 
 
@@ -229,11 +225,14 @@ msaI=mean(saI);msaU=mean(saU);
 %   hold off
      %saveas(gcf,sprintf('sub%dNRU',i),'bmp')    
 end
+loop=loop+1;
 end
 
 figure;
 hold all
 plot(aI(:,1),msaI,'m')
+scatter(aI(:,1),aI,'m','jitter','on')
+
 plot(aU(:,1),msaU,'g')
 ylabel('Probability of accepting No Redo');
   xlabel('Offer for No Redo');
