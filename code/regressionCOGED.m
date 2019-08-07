@@ -1,4 +1,4 @@
-function [IPmatrix]=regressionCOGED(data,perRedo,varargin)
+function [IPfin]=regressionCOGED(data,perRedo,varargin)
 %% plots for pilot 2 choice data per participant showing amounts on the x axis and
 % choice between easy and hard on the y axis. Running this function will
 % also save the plots on cwp. IPmatrix is an 11*6 matrix, every row is a
@@ -225,8 +225,8 @@ filenameOut=fullfile(io.resultsDir,'IPmatrixOut.csv');
 filenameTaskOut=fullfile(io.resultsDir,'IPtaskOut.csv'); 
 
 
-     writetable(cell2table([names;num2cell(IPfin(IPfin(subNr~=outliers,:))) ]),filenameOut,'writevariablenames',0)
-     writetable(cell2table([namesTask;num2cell(IPtaskFin(subNr~=outliers, :)) ]),filenameTaskOut,'writevariablenames',0)
+     writetable(cell2table([names;num2cell(IPfin(~(ismember(subNr,outliers)),:)) ]),filenameOut,'writevariablenames',0)
+     writetable(cell2table([namesTask;num2cell(IPtaskFin(~(ismember(subNr,outliers)), :)) ]),filenameTaskOut,'writevariablenames',0)
          
      end
 end

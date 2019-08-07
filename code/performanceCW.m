@@ -153,8 +153,8 @@ if saveD
      if ~isempty(outliers)
            devNameOut=fullfile(io.resultsDir,'MedianAccOut.csv');
     rtNameOut=fullfile(io.resultsDir,'MedianRTOut.csv');  
-          devianceOut=deviance(subNr~=outliers,:);
-     RTsOut=RTs(subNr~=outliers,:);    
+          devianceOut=deviance(~(ismember(subNr,outliers)),:);
+     RTsOut=RTs(~(ismember(subNr,outliers)),:);    
      writetable(cell2table([names;num2cell(devianceOut) ]),devNameOut,'writevariablenames',0)
      writetable(cell2table([names;num2cell(RTsOut)]),rtNameOut,'writevariablenames',0)
      end
