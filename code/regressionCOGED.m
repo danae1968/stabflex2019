@@ -1,10 +1,5 @@
 function [IPfin]=regressionCOGED(data,perRedo,varargin)
-%% plots for pilot 2 choice data per participant showing amounts on the x axis and
-% choice between easy and hard on the y axis. Running this function will
-% also save the plots on cwp. IPmatrix is an 11*6 matrix, every row is a
-% participant and every column the IP for different setsizes. (i2, i3, i4,
-% u2,u3,u4)
-% 
+
 
 
 switch nargin
@@ -22,12 +17,11 @@ end
 
 % no redo (no effort) offers
 easyOffer=[0.1 round((0.2:0.2:2.2)*10)/10];
-hardOffer=2;
 maxValue=max(easyOffer);
 minValue=min(easyOffer);
 
 loop=1;
-subNo=data(:,1);cond=data(:,2);sz=data(:,3);offer=data(:,4);choice=data(:,5);rt=data(:,6);block=data(:,7);
+subNo=data(:,1);cond=data(:,2);sz=data(:,3);offer=data(:,4);choice=data(:,5);
 
 for i=subNr
     
@@ -168,11 +162,7 @@ for x=1:length(IPmatrixAll)
         end
     end
 end
-       
-    b0Mat=[betasI(:,1) betasU(:,1) betas1(:,1) betas2(:,1) betas3(:,1) betas4(:,1) betas5(:,1) betas6(:,1) betas7(:,1) betas8(:,1)];
-    b1Mat=[betasI(:,2) betasU(:,2)  betas1(:,2)  betas2(:,2)  betas3(:,2)  betas4(:,2)  betas5(:,2)  betas6(:,2)  betas7(:,2) betas8(:,2) ];
-
-    
+         
 
 %% find outliers in COGED
 %first remove participants for which IPs across set size had to be changed because they were not estimated

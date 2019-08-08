@@ -171,5 +171,3 @@ filenameOut=fullfile(io.resultsDir,'IPDirectOut.csv');
      end
 end
 
-end
-

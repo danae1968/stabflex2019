@@ -169,9 +169,7 @@ if saveD
         case 2
             names={'subNo' 'Across' 'sz1' 'sz2' 'sz3' 'sz4'};
             perName=fullfile(io.resultsDir,'perDirect.csv');
-            missesDirName=fullfile(io.resultsDir,'missesDir.csv');
             writetable(cell2table([names;num2cell([io.subNo' statmatPer]) ]),perName,'writevariablenames',0)
-            writetable(cell2table([names(names(2)==[]);num2cell([io.subNo' statmatNan]) ]),missesDirName,'writevariablenames',0)
     end
     
     

@@ -16,18 +16,18 @@ switch nargin
         subNr=io.subNo;
         saveD=io.saveD;
     case 2
-                io=varargin{1};
-                type=varargin{2};
-                     subNr=io.subNo;
-        saveD=io.saveD;  
-
+        io=varargin{1};
+        type=varargin{2};
+        subNr=io.subNo;
+        saveD=io.saveD;
+        
 end
 
 % addpath(io.dataDir,io.analysisDir)
 cd(io.dataDir);
 
 for i=subNr
-   
+    
     subdir=fullfile(io.dataDir,sprintf('Choices_sub_%d',i));
     participant=(fullfile(subdir,sprintf('ColorFunChoice_s%d.mat',i)));
     
@@ -41,24 +41,32 @@ for i=subNr
             data.choice(n)=0; %0 is hard task
         end
         
-
+        
         % replacing 9 with NaN when participants did not respond
         if data.choice(n)==9
             data.choice(n)=NaN;
         end
         
         keypress=[keypress; i data.key(n,1)];
-    
-                
-                    choicesR=[choicesR;i data.condition(n) data.sz(n) data.easyOffer(n) data.choice(n) data.choiceRT(n) data.block(n) data.key(n,1)];
-                                    
-       
+        
+        
+        choicesR=[choicesR;i data.condition(n) data.sz(n) data.easyOffer(n) data.choice(n) data.choiceRT(n) data.block(n) data.key(n,1) data.version(n)];
+        
+        
         
         
     end
     
 end
 
+switch type % split task vs no effort with ignore vs update choices
+    case 1
+        choicesR=choicesR(choicesR(:,end)==1,:);
+    case 2
+              choicesR=choicesR(choicesR(:,end)==2,:);
+end
+  
+        
 
 if saveD
     keyName=fullfile(io.resultsDir,sprintf('keysPressed%d.mat',max(subNr)));

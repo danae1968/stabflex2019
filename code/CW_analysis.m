@@ -9,7 +9,7 @@ io.projectDir='P:\3017048.04\stabflex2019';
 
 % enter 1 for analysing original experiment 1 and 2 for replication
 % experiment 2
-io.experiment=1;
+io.experiment=2;
 
 if io.experiment==1
     io.lost=4:7; %lost data files
@@ -25,9 +25,9 @@ io.saveD=1; %save output files
 io.doPlots=0; %do plots
 
 todo.Colortest=0; % color sensitivity test
-todo.Colorwheel=1; % colorwheel working memory task performance
+todo.Colorwheel=0; % colorwheel working memory task performance
 todo.ChoiceNR=0; % choices task vs no effort
-todo.ChoiceD=0; % direct comparison choices (ignore vs update)
+todo.ChoiceD=1; % direct comparison choices (ignore vs update)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1. Color sensitivity test performance analysis
@@ -91,15 +91,16 @@ if todo.ChoiceD
     fprintf(1,[repmat('-',1,72),'\n'])
     fprintf(1,'Running ''Analyzing Indifference Points for Direct Comparison choices'' \n')
     
-    io.resultsDir=fullfile(io.projectDir,'results','Choices',sprintf('N%d',max(io.subNo)));
+    io.dataDir=fullfile(io.projectDir,'data',sprintf('Experiment%d',io.experiment),'COGED');    
+    io.resultsDir=fullfile(io.projectDir,'results',sprintf('Experiment%d',io.experiment),'COGED');
+    
     if ~exist(io.resultsDir,'dir')
         mkdir(io.resultsDir)
     end
     
-    io.dataDir=fullfile(io.projectDir,'data','ChoiceTask');
-    [IPmatrixD]=DirectComparisonAnalysis(io.saveD,io.subNo,io,io.doPlots);
-    [choicesDir]=choicesR(io.saveD,io.subNo,io,2);
-    [perIgnore]=PercentageEasy(io.saveD,io.subNo,choicesDir,io,2);
+    [choicesDir]=choicesTrialWise(io,2);    
+    [perIgnore]=PercentageEasy(choicesDir,io,2);
+    [IPmatrixD]=DirectComparisonAnalysis(choicesDir,perIgnore,io);
     
     
     
