@@ -166,8 +166,8 @@ end
 
 %% find outliers in COGED
 %first remove participants for which IPs across set size had to be changed because they were not estimated
-IPAc=[subNr' IPmatrixAll(:,1:2)];
-noIPRows=setdiff(IPAc,[subNr' IPI' IPU'],'rows'); 
+IPAc=[subNr' IPmatrixAll(:,1:2)]; %corrected IPs
+noIPRows=setdiff(IPAc,[subNr' IPI' IPU'],'rows'); %compare with original IPs
 IPAcNoIP=setdiff(IPAc,noIPRows,'rows');
 
 %find outliers based on standard deviation
@@ -206,8 +206,8 @@ namesTask={'subNo' 'SVtask'};
 IPfin=[subNr' IPmatrixAll];
 IPtaskFin=[subNr' IPtask'];
 
-     writetable(cell2table([names;num2cell(IPfin)]),filename,'writevariablenames',0)
-     writetable(cell2table([namesTask;num2cell(IPtaskFin) ]),filenameTask,'writevariablenames',0)
+     writetable(cell2table([num2cell(names);num2cell(IPfin)]),filename,'writevariablenames',0)
+     writetable(cell2table([num2cell(namesTask);num2cell(IPtaskFin) ]),filenameTask,'writevariablenames',0)
      
      if ~isempty(outliers)
   
@@ -215,8 +215,8 @@ filenameOut=fullfile(io.resultsDir,'IPmatrixOut.csv');
 filenameTaskOut=fullfile(io.resultsDir,'IPtaskOut.csv'); 
 
 
-     writetable(cell2table([names;num2cell(IPfin(~(ismember(subNr,outliers)),:)) ]),filenameOut,'writevariablenames',0)
-     writetable(cell2table([namesTask;num2cell(IPtaskFin(~(ismember(subNr,outliers)), :)) ]),filenameTaskOut,'writevariablenames',0)
+     writetable(cell2table([num2cell(names);num2cell(IPfin(~(ismember(subNr,outliers)),:)) ]),filenameOut,'writevariablenames',0)
+     writetable(cell2table([num2cell(namesTask);num2cell(IPtaskFin(~(ismember(subNr,outliers)), :)) ]),filenameTaskOut,'writevariablenames',0)
          
      end
 end
