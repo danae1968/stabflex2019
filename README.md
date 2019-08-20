@@ -2,7 +2,19 @@
 data and analysis scripts for manuscript: Quantifying the subjective cost of cognitive stability and cognitive flexibility
 Included: raw data files, analysis code, analysed data and interactive JASP statistics output files. 
 
-Data files are split in two different experiment folders. Experiment 2 is a direct replication of experiment 1.
+
+#Installation
+
+Get the code as follows:
+
+If you have git installed, open a terminal and run the following command
+
+git clone https://github.com/danae1968/stabflex2019.git
+
+If you don't have git installed, you can also download the code as a ZIP file.
+
+
+Data files are split in two different experiment folders. Experiment 2 is a direct replication of experiment 1 with a higher sample size.
 
 Colorwheel task data structure: 
 
@@ -30,4 +42,21 @@ Practice file: ColorFunChoice_sX_practice.mat
 
 Analysis scripts
 
-Main analysis script: 
+Main analysis script: CW_analysis.m; change io.projectDir to the directory you cloned the code into
+Mixed models analysis script: mixedModelsAnalysis.R
+
+Output files: 
+
+Colorwheel: 	
+	MedianAccOut.csv & MedianAccOut.jasp: deviance analyses files
+	MedianRTOut.csv & MedianRTOut.jasp: RT analyses files
+	performanceRBeh.csv: all data trialwise
+
+COGED: IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files
+	IPmatrixOut.csv & IPmatrixOut.jasp: task versus no effort choice analyses files
+
+The same csv files without the -Out (outlier) ending are the derivative files including outliers
+
+##Contact
+
+danaepapadopetraki@gmail.com
