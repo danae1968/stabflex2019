@@ -24,10 +24,11 @@ addpath(io.analysisDir)
 io.saveD=1; %save output files
 io.doPlots=0; %do plots
 
+%Which tasks to analyse
 todo.Colortest=0; % color sensitivity test
 todo.Colorwheel=0; % colorwheel working memory task performance
-todo.ChoiceNR=1; % choices task vs no effort
-todo.ChoiceD=1; % direct comparison choices (ignore vs update)
+todo.ChoiceNR=0; % choices task vs no effort
+todo.ChoiceD=0; % direct comparison choices (ignore vs update)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1. Color sensitivity test performance analysis
