@@ -3,7 +3,7 @@ data and analysis scripts for manuscript: Quantifying the subjective cost of cog
 Included: raw data files, analysis code, analysed data and interactive JASP statistics output files. 
 
 
-#Installation
+## Installation
 
 Get the code as follows:
 
@@ -14,9 +14,10 @@ git clone https://github.com/danae1968/stabflex2019.git
 If you don't have git installed, you can also download the code as a ZIP file.
 
 
+## Data 
 Data files are split in two different experiment folders. Experiment 2 is a direct replication of experiment 1 with a higher sample size.
 
-Colorwheel task data structure: 
+**Colorwheel task data structure:** 
 
 Main data file: ColorFun_s_X.mat, where X is subject number.
 	Main variables:
@@ -27,7 +28,7 @@ Main data file: ColorFun_s_X.mat, where X is subject number.
 Color sensitivity file: ColorTest_sX.mat
 Practice file: ColorFun_sX_practice.mat
 
-COGED data structure:
+**COGED data structure:**
 
 Main data file: ColorFunChoice_sX.mat
 	Main variables:
@@ -40,7 +41,7 @@ Main data file: ColorFunChoice_sX.mat
 	data.sz: trial demand level, number of squares they are choosing for
 Practice file: ColorFunChoice_sX_practice.mat
 
-Analysis scripts
+## Analysis scripts
 
 Main analysis script: CW_analysis.m; change io.projectDir to the directory you cloned the code into
 Mixed models analysis script: mixedModelsAnalysis.R
@@ -57,6 +58,6 @@ COGED: IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses 
 
 The same csv files without the -Out (outlier) ending are the derivative files including outliers
 
-##Contact
+## Contact
 
 danaepapadopetraki@gmail.com
