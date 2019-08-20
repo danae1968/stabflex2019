@@ -1,8 +1,6 @@
 % wrapper script for analyses of paper titled: "Quantifying the cost of
 % cognitive stability and flexibility". Functions called:
-% colorTestAnalysis.m, performanceTrialWise.m, performanceCW.m,
-% choicesTrialWise.m, PercentageEasy.m, regressionCOGED.m,
-% DirectComparisonAnalysis.m
+% colorTestAnalysis.m, p
 
 clear all
 io=struct();

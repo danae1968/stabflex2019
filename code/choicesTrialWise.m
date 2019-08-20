@@ -1,4 +1,9 @@
 function [choicesR]=choicesTrialWise(varargin)
+%%% function that creates a trial-wise matrix for COGED task.
+%%% Output variable: choicesR; input variables: io: struct defined in main
+%%% script CW_analysis.m,including directory paths, IDs(subNr) and saveD
+%%% save data or not). type: 1 for task vs no effort choices, 2 for ignore 
+%%% versus update choices.
 
 saveD=1;
 subNr=1:62;
@@ -9,10 +14,10 @@ switch nargin
     case 0
         saveD=0;
         subNr=1:62;
-        type=1; %1 for No redo 2 for direct comparison
+        type=1; %1 for task vs no effort 2 for direct comparison
     case 1
         io=varargin{1};
-        type=1; %1 for No redo 2 for direct comparison
+        type=1; %1 for task vs no effort 2 for direct comparison
         subNr=io.subNo;
         saveD=io.saveD;
     case 2
@@ -38,7 +43,7 @@ for i=subNr
         
         %data are transformed to 0,1 for regression
         if data.choice(n)==2
-            data.choice(n)=0; %0 is hard task
+            data.choice(n)=0; %0 is selecting the hard task (redo the task or ignore)
         end
         
         
@@ -47,7 +52,7 @@ for i=subNr
             data.choice(n)=NaN;
         end
         
-        keypress=[keypress; i data.key(n,1)];
+        keypress=[keypress; i data.key(n,1)]; %keys participants pressed
         
         
         choicesR=[choicesR;i data.condition(n) data.sz(n) data.easyOffer(n) data.choice(n) data.choiceRT(n) data.block(n) data.key(n,1) data.version(n)];

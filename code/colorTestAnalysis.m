@@ -3,7 +3,7 @@ function [aveDev,medDev]=colorTestAnalysis(varargin)
 %%% involves a colored square and a colorwheel, participants have to
 %%% identify the color of the square on the color wheel and click with a
 %%% mouse. Output variables: aveDev: average deviance (distance in degrees
-%%% from correct color) medDev: median devicance. 
+%%% from correct color) medDev: median deviance. 
 
 performance=[];
 

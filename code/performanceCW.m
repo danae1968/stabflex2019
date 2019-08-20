@@ -1,13 +1,11 @@
 function [statmatDev,statmatRT,statmatSZ]=performanceCW(data,varargin)
-
-
-% Type 0 = ignore (distractoer resistance working memory trials); Type 2 = update (flexible updating working memory trials)
-% sz = set size: 1-4 items to be remembered
-
-
-% projectDir='P:\3017048.04';
-% analysisDir=fullfile(projectDir,'code','Colorwheel');
-% resultsDir=fullfile(projectDir,'results','Colorwheel');
+%%% function that generates main derivatives and analysis files for the
+%%% colorwheel working memory task. Input: data: trial-wise matrix of
+%%% colorwheel performance data, derived from performanceTrialWise.m
+%%% script. io: analysis parameters defined in main analysis script.
+%%% including directory paths, IDs(subNr) and saveD(save data or not).
+%%% dataType: main task analysis 1, 2 for redo data analysis. functions
+%%% called: findOutliers.m 
 
 switch nargin
     case 1
@@ -26,8 +24,6 @@ switch nargin
         saveD=io.saveD;
         dataType=varargin{2};
 end
-
-%dataName=sprintf('performanceRBeh%d',max(subNr));
 
 switch dataType %main task or redo
     case 1

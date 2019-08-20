@@ -44,7 +44,7 @@ for j=subNr
  
         subdir=fullfile(io.dataDir,sprintf('Colorwheel_sub_%d',j));
         
-        % type=1 for training and type=2 for redo
+        % type=1 for main task data and type=2 for redo
         switch type
             case 1
                 participant=(fullfile(subdir,sprintf('ColorFun_s%d.mat',j)));

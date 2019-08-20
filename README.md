@@ -48,13 +48,16 @@ Mixed models analysis script: mixedModelsAnalysis.R
 
 Output files: 
 
-Colorwheel: 	
+**Colorwheel:** 	
 	MedianAccOut.csv & MedianAccOut.jasp: deviance analyses files
 	MedianRTOut.csv & MedianRTOut.jasp: RT analyses files
 	performanceRBeh.csv: all data trialwise
 
-COGED: IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files
+**COGED:** 
 	IPmatrixOut.csv & IPmatrixOut.jasp: task versus no effort choice analyses files
+	IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files
+	choicesRNR.csv: task versus no effort data trialwise
+	choicesRDir.csv: ignore versus update data trialwise
 
 The same csv files without the -Out (outlier) ending are the derivative files including outliers
 
