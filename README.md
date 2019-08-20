@@ -59,7 +59,8 @@ Output files:
 	choicesRNR.csv: task versus no effort data trialwise
 	choicesRDir.csv: ignore versus update data trialwise
 
-The same csv files without the -Out (outlier) ending are the derivative files including outliers
+The same csv files without the -Out (outlier) ending are the derivative files including outliers.
+correlationsIPsPooled.csv & correlationsIPsPooled.jasp: data pooled from both experiments for correlation between performance and preference
 
 ## Contact
 
