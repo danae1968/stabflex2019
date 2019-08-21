@@ -15,7 +15,7 @@ If you don't have git installed, you can also download the code as a ZIP file.
 
 
 ## Data 
-Data files are split in two different experiment folders. Experiment 2 is a direct replication of experiment 1 with a higher sample size.
+Data files are split in two different experiment folders. Experiment 2 is a direct replication of experiment 1 (28 participants) with a higher sample size (62 participants).
 
 **Colorwheel task data structure:** 
 
