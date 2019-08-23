@@ -23,10 +23,10 @@ Main data file: ColorFun_s_X.mat, where X is subject number.
 
 	Main variables:
 
-	- data.respDif: absolute deviance from correct color; trial accuracy index
-	- data.setsize: trial demand level, number of squares
-	- data.type: trial condition; 0 for Ignore, 2 for Update
-	- data.rt: trial reaction time; registered mouseclick on colorwheel 
+	* data.respDif: absolute deviance from correct color; trial accuracy index
+	* data.setsize: trial demand level, number of squares
+	* data.type: trial condition; 0 for Ignore, 2 for Update
+	* data.rt: trial reaction time; registered mouseclick on colorwheel 
 
 Color sensitivity file: ColorTest_sX.mat
 
@@ -50,21 +50,21 @@ Practice file: ColorFunChoice_sX_practice.mat
 
 ## Analysis scripts
 
-Main analysis script: CW_analysis.m; change io.projectDir to the directory you cloned the code into;
-Mixed models analysis script: mixedModelsAnalysis.R
+- Main analysis script: CW_analysis.m; change io.projectDir to the directory you cloned the code into
+- Mixed models analysis script: mixedModelsAnalysis.R
 
 Output files: 
 
 **Colorwheel:** 	
-	MedianAccOut.csv & MedianAccOut.jasp: deviance analyses files;
-	MedianRTOut.csv & MedianRTOut.jasp: RT analyses files;
-	performanceRBeh.csv: all data trialwise
+	- MedianAccOut.csv & MedianAccOut.jasp: deviance analyses files;
+	- MedianRTOut.csv & MedianRTOut.jasp: RT analyses files;
+	- performanceRBeh.csv: all data trialwise
 
 **COGED:** 
-	IPmatrixOut.csv & IPmatrixOut.jasp: task versus no effort choice analyses files;
-	IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files;
-	choicesRNR.csv: task versus no effort data trialwise;
-	choicesRDir.csv: ignore versus update data trialwise
+	- IPmatrixOut.csv & IPmatrixOut.jasp: task versus no effort choice analyses files;
+	- IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files;
+	- choicesRNR.csv: task versus no effort data trialwise;
+	- choicesRDir.csv: ignore versus update data trialwise
 
 The above csv file names without the -Out (outlier) ending are the derivative analysis files including outliers.
 correlationsIPsPooled.csv & correlationsIPsPooled.jasp: data pooled from both experiments for correlation between performance and preference
