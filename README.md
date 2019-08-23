@@ -49,15 +49,13 @@ Data files are split in two different experiment folders. Experiment 2 (62 parti
 	Main analysis script: CW_analysis.m; change io.projectDir to the directory you cloned the code into
 	Mixed models analysis script: mixedModelsAnalysis.R
 
-Output files: 
-
-**Colorwheel:** 
+**Colorwheel output files:** 
 
 	MedianAccOut.csv & MedianAccOut.jasp: deviance analyses files
 	MedianRTOut.csv & MedianRTOut.jasp: RT analyses files
 	performanceRBeh.csv: all data trialwise
 
-**COGED:** 
+**COGED output files:** 
 
 	IPmatrixOut.csv & IPmatrixOut.jasp: task versus no effort choice analyses files
 	IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files
