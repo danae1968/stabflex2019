@@ -14,7 +14,7 @@ git clone https://github.com/danae1968/stabflex2019.git
 If you don't have git installed, you can also download the code as a ZIP file.
 
 
-## Data 
+## Completely raw Data 
 Data files are split in two different experiment folders. Experiment 2 (62 participants) is a direct replication of experiment 1 (28 participants) with a higher sample size.
 
 **Colorwheel task data structure:** 
@@ -53,14 +53,14 @@ Data files are split in two different experiment folders. Experiment 2 (62 parti
 
 	MedianAccOut.csv & MedianAccOut.jasp: deviance analyses files
 	MedianRTOut.csv & MedianRTOut.jasp: RT analyses files
-	performanceRBeh.csv: all data trialwise
+	performanceRBeh.csv: performance raw data in a matrix per trial
 
 **COGED output files:** 
 
 	IPmatrixOut.csv & IPmatrixOut.jasp: task versus no effort choice analyses files
 	IPDirectOut.csv & IPDirectOut.jasp: ignore versus update choice analyses files
-	choicesRNR.csv: task versus no effort data trialwise
-	choicesRDir.csv: ignore versus update data trialwise
+	choicesRNR.csv: task versus no effort raw data in a matrix trialwise
+	choicesRDir.csv: ignore versus update raw data in a matrix trialwise
 
 The above csv file names without the -Out (outlier) ending are the derivative analysis files including outliers.
 correlationsIPsPooled.csv & correlationsIPsPooled.jasp: data pooled from both experiments for correlation between performance and preference

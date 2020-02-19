@@ -89,7 +89,7 @@ for j=subNr
                         signedDev=mod(-360,signedDev);
                     end
                     %% generate matrix
-                    performanceR=[performanceR;j data(x,y).respDif data(x,y).rt data(x,y).setsize data(x,y).type trial(x,y).probeColNum data(x,y).lureDif data(x,y).thetaCorrect data(x,y).tau thetaLure signedDev];
+                    performanceR=[performanceR;j data(x,y).respDif data(x,y).rt data(x,y).setsize data(x,y).type trial(x,y).probeColNum data(x,y).lureDif data(x,y).thetaCorrect data(x,y).tau thetaLure signedDev x y];
                 case 2 % for redo data 
                     
                     performanceR=[performanceR;j data(x,y).respDif data(x,y).rt data(x,y).setsize data(x,y).type data(x,y).lureDif];

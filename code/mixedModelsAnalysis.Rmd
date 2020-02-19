@@ -1,0 +1,184 @@
+---
+title: "Mixed Models Colorwheel"
+author: "Danae Papadopetraki"
+date: "December 2, 2019"
+output: html_document
+---
+
+```{r}
+rm(list=ls())
+
+library(lme4)
+library(reshape2)
+#library(brms)
+# experiment =1 for original study, 2 for replication and 3 for both studies pooled
+experiment=3
+
+if (Sys.info()["sysname"] == "Windows"){
+  projectDir <- "P:/3017048.04"
+} else if (Sys.info()["sysname"] == "Linux"){
+  projectDir <- "/project/3017048.04"
+}
+
+
+if (experiment==2) {
+  
+  directory=file.path(projectDir,'stabflex2019','results','Experiment2','COGED','choicesRNR.csv')
+  directoryDev=file.path(projectDir, 'stabflex2019','results','Experiment2','Colorwheel','MedianAcc.csv')
+  directoryOut=dirname(directory)
+  prefix='rep'
+
+}else if (experiment==1) {
+  
+  directory=file.path(projectDir,'stabflex2019','results','Experiment1','COGED','choicesRNR.csv')
+  directoryDev=file.path(projectDir,'stabflex2019','results','Experiment1','Colorwheel','MedianAcc.csv')
+  directoryOut=dirname(directory)
+    prefix='ori'
+  
+  
+}else if (experiment==3) {
+  directoryDev=file.path(projectDir,'stabflex2019','results','Pooled','MedianAcc.csv')
+  directory1= file.path(projectDir,'stabflex2019','results','Experiment1','COGED','choicesRNR.csv')
+  directory2=file.path(projectDir,'stabflex2019','results','Experiment2','COGED','choicesRNR.csv')
+  directoryOut=dirname(directoryDev)
+    prefix='all'
+
+  
+}
+```
+################## logistic regression model: No Redo data
+Read and convert data
+```{r}
+  if (experiment==3) {
+    #read data from both experiments
+    IPData1=IPData=read.csv(file=directory1,header=F,sep=',')
+    IPData2=IPData=read.csv(file=directory2,header=F,sep=',')
+    #add 100 to subjects IDs from experiment 1 to avoid matching IDs
+    IPData1$V1=IPData1$V1+100
+    IPData=rbind(IPData2, IPData1)
+  }else {
+  IPData=read.csv(file=directory,header=T,sep=',')
+}
+
+  names(IPData)=c("participant","condition","setSize","easyOffer","choice","rt","block","button")
+  
+  
+  ###performance data
+  devD=read.csv(file=directoryDev,header=T,sep=',') #deviance accuracy
+
+  
+  #convert performance to long format
+  
+  devLong=reshape(devD,varying =c( "I1","I2","I3","I4","U1","U2","U3","U4"),direction = "long",idvar = "subNo",timevar="setSize",sep="")
+  deviance=reshape2:::melt.data.frame(devLong,id.vars=c('subNo','setSize'),value.name="deviance",variable.name="condition",measure.vars=c("I","U"))
+
+  #replace no answer with NA in choice data
+  IPData$choice[IPData$choice==9]=NA
+  IPData$dev=NA
+
+  
+  #assign deviance per cell 
+  for (val in unique(IPData$participant)){
+    for (val2 in unique(IPData$setSize)){
+      IPData$dev[IPData$participant==val & IPData$setSize==val2 & IPData$condition==0]=deviance$deviance[deviance$subNo==val & deviance$condition=="I" & deviance$setSize==val2 ]
+      IPData$dev[IPData$participant==val & IPData$setSize==val2 & IPData$condition==2]=deviance$deviance[deviance$subNo==val & deviance$condition=="U" & deviance$setSize==val2 ]
+      
+    }}
+  
+  IPData$devZ=scale(log(IPData$dev))
+  IPData$easyOfferZ=scale(log(IPData$easyOffer))
+  IPData$devM=scale(IPData$dev, scale = TRUE, center = TRUE)
+  IPData$easyOfferM=scale(IPData$easyOffer, scale = TRUE, center = TRUE)
+  
+  IPData$condition=as.factor(IPData$condition)
+  IPData=IPData[!is.na(IPData$choice), ]
+ 
+   #remove outlier (did not perform choice task) from experiment 2
+  if (experiment!=1){
+  IPDataF=IPData[IPData$participant!=46, ]
+  }else{ 
+    IPDataF=IPData}
+    ```
+Mixed effects models with lmer for effect of condition in the presence of deviance
+- Model comparison
+```{r}  
+ 
+  mod1=glmer(choice~setSize+easyOffer+dev+(1+setSize+dev+easyOffer|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+summary(mod1)
+save("mod1", file = sprintf("%s/mod1_%s.RData",directoryOut,prefix))
+             
+                       
+ mod2=glmer(choice~setSize+easyOffer+dev+condition+(1+setSize+dev+easyOffer|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod2)
+save("mod2", file = sprintf("%s/mod2_%s.RData",directoryOut,prefix))
+  
+if (experiment==1) {   
+  m1=update(mod1, control = glmerControl(optimizer= "optimx", optCtrl  = list(method="nlminb"))) 
+  
+m2=update(mod2, control = glmerControl(optimizer= "optimx", optCtrl  = list(method="nlminb")))
+anova(m1,m2)}
+             
+    #compare model with and without deviance (performance index)
+  anova(mod1,mod2)    
+    ```
+-   Model including deviance random slope
+
+    ```{r} 
+ mod3=glmer(choice~setSize+easyOffer+dev+condition+(1+dev+condition|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+summary(mod3)
+save("mod3", file = sprintf("%s/mod3_%s.RData",directoryOut,prefix))
+
+  
+                                 
+  findBetas <- function(modelName) {
+  Vcov <- vcov(modelName, useScale = FALSE)
+  betas <- fixef(modelName)
+  se <- sqrt(diag(Vcov))
+  zval <- betas / se
+  pval <- 2 * pnorm(abs(zval), lower.tail = FALSE)
+  pval<-round(pval,digits=50)
+  return(cbind(betas, se, zval, pval))}
+  
+  
+  #assess presence of condition effect after including deviance
+  findBetas(mod3)
+    ```
+   *Same models with mean centered continuous variables*
+```{r}
+  mod1s=glmer(choice~setSize+easyOfferM+devM+(1+setSize+devM+easyOfferM|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod1s)
+                save("mod1s", file = sprintf("%s/mod1s_%s.RData",directoryOut,prefix))
+                
+                       
+ mod2s=glmer(choice~setSize+easyOfferM+devM+condition+(1+setSize+devM+easyOfferM|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod2s)
+                save("mod2s", file = sprintf("%s/mod2s_%s.RData",directoryOut,prefix))
+                
+                                
+  mod3s=glmer(choice~setSize+easyOfferM+devM+condition+(1+devM+condition|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod3s)
+                  save("mod3s", file = sprintf("%s/mod3s_%s.RData",directoryOut,prefix))
+anova(mod1s,mod2s)
+  
+```
+      
+ Mixed models for the effect of set size in the presence of deviance
+```{r}
+mod4=glmer(choice~setSize+easyOffer+condition+dev+(1+condition+dev+easyOffer|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod4)
+                  save("mod4", file = sprintf("%s/mod4_%s.RData",directoryOut,prefix))
+                  
+mod5=glmer(choice~easyOffer+condition+dev+(1+condition+dev+easyOffer|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod5)
+                  save("mod5", file = sprintf("%s/mod5_%s.RData",directoryOut,prefix))
+                  
+mod6=glmer(choice~setSize+easyOffer+condition+dev+(1+setSize+dev|participant),data=IPDataF,family=binomial,control = glmerControl(optimizer =c( "bobyqa"), optCtrl = list(maxfun=1e+9)))
+  summary(mod6)
+                  save("mod6", file = sprintf("%s/mod6_%s.RData",directoryOut,prefix))         
+                  
+                  anova(mod4,mod5)
+                  findBetas(mod6)
+
+```
+
+
