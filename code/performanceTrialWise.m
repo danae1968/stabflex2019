@@ -82,11 +82,11 @@ for j=subNr
                         thetaLure=thetaLure-360;
                     end
                     
-                    signedDev=data(x,y).thetaCorrect-data(x,y).tau;
+                    signedDev=data(x,y).tau-data(x,y).thetaCorrect;
                     if signedDev>180
-                        signedDev=mod(360,signedDev);
+                        signedDev=signedDev - 360;
                     elseif signedDev<-180
-                        signedDev=mod(-360,signedDev);
+                        signedDev=signedDev + 360;
                     end
                     %% generate matrix
                     performanceR=[performanceR;j data(x,y).respDif data(x,y).rt data(x,y).setsize data(x,y).type trial(x,y).probeColNum data(x,y).lureDif data(x,y).thetaCorrect data(x,y).tau thetaLure signedDev x y];

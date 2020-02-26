@@ -133,6 +133,179 @@ rtAc=[IgnoreRT' UpdateRT'];
 %% find outliers in performance
 [outliers]=findOutliers([subNr' devAc rtAc]);
 
+
+%% plots
+%% Errors for histograms
+xError=-180:2:180;
+
+[xI]=hist(errorI,xError);
+[xU]=hist(errorU,xError);
+[x4]=hist(error4,xError);[x3]=hist(error3,xError);[x2]=hist(error2,xError);[x1]=hist(error1,xError);
+[xI1]=hist(errorI1,xError);[xI2]=hist(errorI2,xError);[xI3]=hist(errorI3,xError);[xI4]=hist(errorI4,xError);
+[xU1]=hist(errorU1,xError);[xU2]=hist(errorU2,xError);[xU3]=hist(errorU3,xError);[xU4]=hist(errorU4,xError);
+
+errorDenAc=[ mean(xI,2)  mean(xU,2)  mean(x1,2)  mean(x2,2)  mean(x3,2) mean(x4,2)]; 
+errorStdAc=[ std(xI,0,2)  std(xU,0,2)  std(x1,0,2)  std(x2,0,2)  std(x3,0,2) std(x4,0,2)];
+errorSteAc=errorStdAc /( sqrt(size(x1,2)));
+
+errorDen= [mean(xI1,2) mean(xI2,2) mean(xI3,2) mean(xI4,2) mean(xU1,2) mean(xU2,2) mean(xU3,2) mean(xU4,2) ];
+errorStd=[ std(xI1,0,2) std(xI2,0,2) std(xI3,0,2) std(xI4,0,2) std(xU1,0,2) std(xU2,0,2) std(xU3,0,2) std(xU4,0,2)];
+errorSte=errorStd /( sqrt(size(x1,2)));
+
+
+if io.doPlots
+    
+
+x=xError;
+
+figure; %4 set sizes
+y=errorDenAc;
+s=errorSteAc;
+hold on
+plotshaded(x,[y(:,3)-(s(:,3)),y(:,3)+(s(:,3))],'b')
+plot(x,[y(:,3)],'b')
+plotshaded(x,[y(:,4)-(s(:,4)),y(:,4)+(s(:,4))],'g')
+plot(x,[y(:,4)],'g')
+plotshaded(x,[y(:,5)-(s(:,5)),y(:,5)+(s(:,5))],'m')
+plot(x,[y(:,5)],'m')
+plotshaded(x,[y(:,6)-(s(:,6)),y(:,6)+(s(:,6))],'r')
+plot(x,[y(:,6)],'r')
+ylim([0 3.5]); xlim([-50 50])
+hold off
+%saveas(gcf,'repErrorAllPlots.pdf')
+
+
+figure;% 2 conditions
+hold on
+plotshaded(x,[y(:,1)-(s(:,1)),y(:,1)+(s(:,1))],'g')
+plot(x,[y(:,1)],'g')
+ylim([0 7]); xlim([-30 30])
+title('Ignore')
+
+subplot(2,1,2);
+hold on
+plotshaded(x,[y(:,2)-s(:,2),y(:,2)+s(:,2)],'m')
+plot(x,[y(:,2)],'m')
+ylim([0 7]); xlim([-30 30])
+title('Update')
+hold off
+%saveas(gcf,'repErrorCondPlots.pdf')
+
+
+figure; % all cells in different plots
+y=errorDen;
+s=errorSte;
+subplot(4,2,1);
+hold on
+plotshaded(x,[y(:,1)-(s(:,1)),y(:,1)+(s(:,1))],'b')
+plot(x,[y(:,1)],'b')
+ylim([0 2]); xlim([-30 30])
+title('Ignore set size 1')
+hold off
+
+subplot(4,2,3);
+hold on
+plotshaded(x,[y(:,2)-s(:,2),y(:,2)+s(:,2)],'g')
+plot(x,[y(:,2)],'g')
+ylim([0 2]); xlim([-30 30])
+title('Ignore Set size 2')
+
+subplot(4,2,5);
+hold on
+plotshaded(x,[y(:,3)-s(:,3),y(:,3)+s(:,3)],'m')
+plot(x,[y(:,3)],'m')
+ylim([0 2]); xlim([-30 30])
+title('Ignore Set size 3')
+
+hold off
+subplot(4,2,7);
+hold on
+plotshaded(x,[y(:,4)-s(:,4),y(:,4)+s(:,4)],'r')
+plot(x,[y(:,4)],'r')
+ylim([0 2]); xlim([-30 30])
+title('Ignore Set size 4')
+hold off
+
+subplot(4,2,2);
+hold on
+plotshaded(x,[y(:,5)-s(:,5),y(:,5)+s(:,5)],'b')
+plot(x,[y(:,5)],'b')
+ylim([0 2]); xlim([-30 30])
+title('Update Set size 1')
+hold off
+
+subplot(4,2,4);
+hold on
+plotshaded(x,[y(:,6)-s(:,6),y(:,6)+s(:,6)],'g')
+plot(x,[y(:,6)],'g')
+ylim([0 2]); xlim([-30 30])
+title('Update Set size 2')
+hold off
+
+subplot(4,2,8);
+hold on
+plotshaded(x,[y(:,8)-s(:,8),y(:,8)+s(:,8)],'r')
+plot(x,[y(:,8)],'r')
+ylim([0 2]); xlim([-30 30])
+title('Update Set size 4')
+hold off
+
+subplot(4,2,6);
+hold on
+plotshaded(x,[y(:,7)-s(:,7),y(:,7)+s(:,7)],'m')
+plot(x,[y(:,7)],'m')
+ylim([0 2]); xlim([-30 30])
+title('Update Set size 3')
+hold off
+
+%saveas(gcf,'repErrorPlots.pdf')
+
+figure; % all cells in different plots
+y=errorDen;
+s=errorSte;
+
+subplot(2,2,1);
+hold on
+plotshaded(x,[y(:,1)-(s(:,1)),y(:,1)+(s(:,1))],'b')
+plot(x,[y(:,1)],'b')
+plotshaded(x,[y(:,5)-s(:,5),y(:,5)+s(:,5)],'m')
+plot(x,[y(:,5)],'m')
+ylim([0 2]); xlim([-30 30])
+title('Set size 1')
+hold off
+
+subplot(2,2,2);
+hold on
+plotshaded(x,[y(:,2)-s(:,2),y(:,2)+s(:,2)],'b')
+plot(x,[y(:,2)],'b')
+plotshaded(x,[y(:,6)-s(:,6),y(:,6)+s(:,6)],'m')
+plot(x,[y(:,6)],'m')
+ylim([0 2]); xlim([-30 30])
+title('Set size 2')
+
+subplot(2,2,3);
+hold on
+plotshaded(x,[y(:,3)-s(:,3),y(:,3)+s(:,3)],'b')
+plot(x,[y(:,3)],'b')
+plotshaded(x,[y(:,7)-s(:,7),y(:,7)+s(:,7)],'m')
+plot(x,[y(:,7)],'m')
+ylim([0 2]); xlim([-30 30])
+title('Set size 3')
+
+hold off
+subplot(2,2,4);
+hold on
+plotshaded(x,[y(:,4)-s(:,4),y(:,4)+s(:,4)],'b')
+plot(x,[y(:,4)],'b')
+plotshaded(x,[y(:,8)-s(:,8),y(:,8)+s(:,8)],'m')
+plot(x,[y(:,8)],'m')
+ylim([0 2]); xlim([-30 30])
+title('Set size 4')
+hold off
+
+%saveas(gcf,'repErrorCondSZPlots.pdf')
+
+end
 %% save Data
 if saveD
      
