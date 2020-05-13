@@ -1,0 +1,29 @@
+----------------------------------------
+Begin PBS Prologue Wed Mar 25 12:33:08 CET 2020 1585135988
+Job ID:		   38765466.dccn-l029.dccn.nl
+Username:	   danpap
+Group:		   control
+Asked resources:   walltime=07:28:00,mem=3gb,nodes=1,neednodes=1
+Queue:		   interactive
+Nodes:		   dccn-c024.dccn.nl
+----------------------------------------
+Limiting memory+swap to 3758096384 bytes ...
+End PBS Prologue Wed Mar 25 12:33:08 CET 2020 1585135988
+----------------------------------------
+New Walltime: 07:51:34
+Job info started...
+MATLAB is selecting SOFTWARE OPENGL rendering.
+----------------------------------------
+Begin PBS Epilogue Wed Mar 25 20:01:53 CET 2020 1585162913
+Job ID:		   38765466.dccn-l029.dccn.nl
+Job Exit Code:     -11
+Username:	   danpap
+Group:		   control
+Job Name:	   MATLAB
+Session:	   46047
+Asked resources:   walltime=07:28:00,mem=3gb,nodes=1,neednodes=1
+Used resources:	   cput=00:20:33,walltime=07:28:40,mem=1032818688b
+Queue:		   interactive
+Nodes:		   dccn-c024.dccn.nl
+End PBS Epilogue Wed Mar 25 20:01:53 CET 2020 1585162913
+----------------------------------------

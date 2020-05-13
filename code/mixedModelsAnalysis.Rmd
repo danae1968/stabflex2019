@@ -12,7 +12,7 @@ library(lme4)
 library(reshape2)
 #library(brms)
 # experiment =1 for original study, 2 for replication and 3 for both studies pooled
-experiment=3
+experiment=2
 
 if (Sys.info()["sysname"] == "Windows"){
   projectDir <- "P:/3017048.04"
