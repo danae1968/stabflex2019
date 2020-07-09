@@ -15,7 +15,7 @@ data1(:,1)=data1(:,1)+100;
 data=[data1 ;data2];
 %remove NaN trials (no response)
 dataN= data(~isnan(data(:,5)),:);
-subNo=dataN(:,1);cond=dataN(:,2);sz=dataN(:,3);offer=dataN(:,4);choice=1-dataN(:,5);
+subNo=dataN(:,1);cond=dataN(:,2);sz=dataN(:,3);offer=dataN(:,4);choice=dataN(:,5);
 
 num_subs = length(unique(subNo));  % Number of subjects
 
@@ -83,7 +83,7 @@ model_results.models       = models;
 model_results.model_names  = model_names;
 model_results.model_params = model_params;
 
-save(filenameCond);
+% save(filenameCond);
 
 %% For all these discounting functions:
 % p(1) = discount parameter
@@ -92,7 +92,7 @@ save(filenameCond);
 function [prob, val] = prob_lin(p,rewardEasy,effort,chosen)
 discount = p(1);
 beta = p(2);
-rewardHard=2*ones(length(rewardEasy),1); %reward for hard offer was always 2 for us
+rewardHard=2*ones(length(rewardEasy),1); %reward
 val =   rewardHard - (discount .* effort);
 % base =  1 - discount; %money for doing nothing
 base=rewardEasy;

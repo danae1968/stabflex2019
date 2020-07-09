@@ -1,4 +1,4 @@
-function model_results = modelscriptTrevor
+function model_results = modelscriptAc
 
 
 
@@ -7,7 +7,7 @@ data2=csvread('P:\3017048.04\stabflex2019\results\Experiment2\COGED\choicesRNR.c
 data1=csvread('P:\3017048.04\stabflex2019\results\Experiment1\COGED\choicesRNR.csv');
 noOutliers=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','A2:A75');
 filenameAc='P:\3017048.04\stabflex2019\results\Pooled\modelsComp.mat';
-filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCondOut.mat';
+filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCond.mat';
 
 %ensure different subNo for the two experiments
 data1(:,1)=data1(:,1)+100;
@@ -15,36 +15,35 @@ data1(:,1)=data1(:,1)+100;
 data=[data1 ;data2];
 %remove NaN trials (no response)
 dataN= data(~isnan(data(:,5)),:);
-subNo=dataN(:,1);cond=dataN(:,2);sz=dataN(:,3);offer=dataN(:,4);choice=1-dataN(:,5);
+subNo=dataN(:,1);cond=dataN(:,2);sz=dataN(:,3);offer=dataN(:,4);choice=dataN(:,5);
 
 num_subs = length(unique(subNo));  % Number of subjects
 
 models = { % Models to apply
+    @(p, reward, effort, chosen) prob_lin(p, reward, effort, chosen);%1
     @(p, reward, effort, chosen) prob_para(p, reward, effort, chosen);%2
     @(p, reward, effort, chosen) prob_hyp(p, reward, effort, chosen);%3
-    @(p, reward, effort, chosen) prob_lin(p, reward, effort, chosen);%1
-    @(p, reward, effort, chosen) prob_exp(p, reward, effort, chosen);%4
+    @(p, reward, effort, chosen) prob_exp(p, reward, effort, chosen);%3
     };
 
-model_names = {'parabolic', 'hyperbolic','linear', 'exponential'};  % Model names
+model_names = {'linear', 'parabolic', 'hyperbolic','exponential'};  % Model names
 model_params = [2 2 2 2];  % Number of parameters for each model
 
 aic = nan(num_subs, length(models));
 bic = nan(num_subs, length(models));
 
 iter=1;
-loop=1;
-for condition=unique(cond)'
-for sub =noOutliers' %unique(subNo)'  % For each subject
+
+for sub =noOutliers'%unique(subNo)'  % For each subject
     
-    effort = sz(subNo == sub & cond==condition); % Effort
-    rewardEasy = offer(subNo == sub & cond==condition); % Reward for easy offer
-    chosen = choice(subNo == sub & cond==condition); % Choice
+    effort = sz(subNo == sub); % Effort
+    reward = offer(subNo == sub); % Reward
+    chosen = choice(subNo == sub); % Choice
     
     for modNum = 1:length(models)  % For each model
         pfunc = (models{modNum});
         %eps: minimum Z matlab can recognize in which Z+1=1
-        neg_likelihood_func = @(p) -sum(log(eps+pfunc(p,rewardEasy,effort,chosen))) ;
+        neg_likelihood_func = @(p) -sum(log(eps+pfunc(p,reward,effort,chosen))) ;
         p{modNum}=[]; nll(modNum)=inf;
         
         for k = 1:20 % Randomise starting values
@@ -53,37 +52,34 @@ for sub =noOutliers' %unique(subNo)'  % For each subject
           
             constrained_nll = @(p) neg_likelihood_func(p) + (p(1)<0)*realmax + (p(2)<0)*realmax ; %if negative max, if positive 0
             %fminsearch: nonlinear programming solver. Searches for the minimum of a problem specified by
-            %pk: local minimum p (parameter), nllk: y=fun(x), where x=p/likelihood
             [pk, nllk] = fminsearch( constrained_nll, startp, optimset('MaxFunEvals',48000,'MaxIter',48000) );  % Find the optimal parameters
             if nllk<nll(modNum)  % Is this better than previous estimates?
                 nll(modNum)=nllk; p{modNum}=pk; % If so, update the 'best' estimate
             end
-            model_results.all_nll(iter,modNum,k,loop) = nllk;
-            model_results.all_p{iter,modNum,k,loop}  = pk;
+            model_results.all_nll(iter,modNum,k) = nllk;
+            model_results.all_p{iter,modNum,k}  = pk;
         end
           
         % For each model, store probabilities of each trial
-        model_results.prob{iter,modNum,loop} =   pfunc(p{modNum},rewardEasy, effort, chosen);
+        model_results.prob{iter,modNum} =   pfunc(p{modNum},reward, effort, chosen);
         aic(modNum) = (2*model_params(modNum)) - (2*-nll(modNum));
         % original: bic(j) = log(length(chosen)) * model_params(j)) - (2*-nll(j);
         % formulas: aic=?2(logL)+2(numParam) ;bic=?2(logL)+numParam?log(numObs)
         bic(modNum) = log(length(chosen)) * model_params(modNum) - (2*-nll(modNum));
-        model_results.aic(iter,modNum,loop) = aic(modNum);  % AIC
-        model_results.bic(iter,modNum,loop) = bic(modNum);  % BIC
-        model_results.likelihood(iter,modNum,loop) = nll(modNum); % Likelihood
-        model_results.params{iter,modNum,loop} = p{modNum}; % Parameters
+        model_results.aic(iter,modNum) = aic(modNum);  % AIC
+        model_results.bic(iter,modNum) = bic(modNum);  % BIC
+        model_results.likelihood(iter,modNum) = nll(modNum); % Likelihood
+        model_results.params{iter,modNum} = p{modNum}; % Parameters
         
     end % Next model
     iter=iter+1;
 end
-loop=loop+1;
-iter=1;
-end 
+
 model_results.models       = models;
 model_results.model_names  = model_names;
 model_results.model_params = model_params;
 
-save(filenameCond);
+save(filenameAc);
 
 %% For all these discounting functions:
 % p(1) = discount parameter
