@@ -1,8 +1,6 @@
 function model_results = modelscriptAc
 
 
-
-
 data2=csvread('P:\3017048.04\stabflex2019\results\Experiment2\COGED\choicesRNR.csv');
 data1=csvread('P:\3017048.04\stabflex2019\results\Experiment1\COGED\choicesRNR.csv');
 noOutliers=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','A2:A75');

@@ -24,13 +24,13 @@ end
 io.analysisDir=fullfile(io.projectDir,'code');
 addpath(io.analysisDir)
 
-io.saveD=1; %save output files
+io.saveD=0; %save output files
 io.doPlots=1; %do plots
 
 %Which tasks to analyse
 todo.Colortest=0; % color sensitivity test
-todo.Colorwheel=1; % colorwheel working memory task performance
-todo.ChoiceNR=0; % choices task vs no effort
+todo.Colorwheel=0; % colorwheel working memory task performance
+todo.ChoiceNR=1; % choices task vs no effort
 todo.ChoiceD=0; % direct comparison choices (ignore vs update)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

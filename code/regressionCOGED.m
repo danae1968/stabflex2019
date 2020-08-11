@@ -185,7 +185,7 @@ if doPlots
     figure;
     hold all
     plot(aI(:,1),msaI,'m')
-    scatter(aI(:,1),aI,'m','jitter','on')
+%     scatter(aI(:,1),aI,'m','jitter','on')
     
     plot(aU(:,1),msaU,'g')
     ylabel('Probability of accepting No Redo');

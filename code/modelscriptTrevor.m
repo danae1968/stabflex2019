@@ -1,13 +1,10 @@
 function model_results = modelscriptTrevor
 
-
-
-
 data2=csvread('P:\3017048.04\stabflex2019\results\Experiment2\COGED\choicesRNR.csv');
 data1=csvread('P:\3017048.04\stabflex2019\results\Experiment1\COGED\choicesRNR.csv');
 noOutliers=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','A2:A75');
 filenameAc='P:\3017048.04\stabflex2019\results\Pooled\modelsComp.mat';
-filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCondOut.mat';
+filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCondFin.mat';
 
 %ensure different subNo for the two experiments
 data1(:,1)=data1(:,1)+100;
@@ -35,7 +32,7 @@ bic = nan(num_subs, length(models));
 iter=1;
 loop=1;
 for condition=unique(cond)'
-for sub =noOutliers' %unique(subNo)'  % For each subject
+for sub=noOutliers'%unique(subNo)'  % For each subject  sub =noOutliers'
     
     effort = sz(subNo == sub & cond==condition); % Effort
     rewardEasy = offer(subNo == sub & cond==condition); % Reward for easy offer
@@ -54,7 +51,7 @@ for sub =noOutliers' %unique(subNo)'  % For each subject
             constrained_nll = @(p) neg_likelihood_func(p) + (p(1)<0)*realmax + (p(2)<0)*realmax ; %if negative max, if positive 0
             %fminsearch: nonlinear programming solver. Searches for the minimum of a problem specified by
             %pk: local minimum p (parameter), nllk: y=fun(x), where x=p/likelihood
-            [pk, nllk] = fminsearch( constrained_nll, startp, optimset('MaxFunEvals',48000,'MaxIter',48000) );  % Find the optimal parameters
+            [pk, nllk] = fminsearch( constrained_nll, startp, optimset('MaxFunEvals',100000,'MaxIter',100000) );  % Find the optimal parameters
             if nllk<nll(modNum)  % Is this better than previous estimates?
                 nll(modNum)=nllk; p{modNum}=pk; % If so, update the 'best' estimate
             end
@@ -75,6 +72,7 @@ for sub =noOutliers' %unique(subNo)'  % For each subject
         
     end % Next model
     iter=iter+1;
+    sub
 end
 loop=loop+1;
 iter=1;

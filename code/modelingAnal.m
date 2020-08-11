@@ -1,10 +1,10 @@
-filename='P:\3017048.04\stabflex2019\results\Pooled\modelsCompOut.mat';
-filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCondOut.mat';
+filename='P:\3017048.04\stabflex2019\results\Pooled\modelsCompFin.mat';
+filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCondFin.mat';
 devI_U=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','G2:G75');
 noOutliers=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','A2:A75');
 %cond=0 for modelling across ignore update conditions, cond=1 for modeling
 %them separately
-cond=0;
+cond=1;
 filenameDir='P:\3017048.04\stabflex2019\results\Pooled\directPooled.csv';
 direct=readtable(filenameDir);
 
@@ -74,14 +74,23 @@ end
  %% save data
 
 if cond==1
-     outputFile='P:\3017048.04\stabflex2019\results\Pooled\discParamsCond.csv';
+     outputFile='P:\3017048.04\stabflex2019\results\Pooled\discParamsCondFin.csv';
+     outputFileOut='P:\3017048.04\stabflex2019\results\Pooled\discParamsCondFinOutl.csv';
+
     names={'sub','kappa_I','kappa_U','beta_I','beta_U'};
-     writetable(cell2table([names;num2cell([noOutliers kappa beta])]),outputFile,'writevariablenames',0)
+    paramMat=[noOutliers kappa beta];
+     writetable(cell2table([names;num2cell(paramMat)]),outputFile,'writevariablenames',0)
+
+[outliers,paramOut]=findOutliers(paramMat(paramMat(:,1)~=46,:));outliers=[outliers;46]; %add participant who pressed only 1 button in outliers and estimate outliers without them
+
+if ~isempty(outliers)
+writetable(cell2table([names;num2cell(paramOut)]),outputFileOut,'writevariablenames',0)
+end
 
 elseif cond==0
          outputFile='P:\3017048.04\stabflex2019\results\Pooled\discParams.csv';
  names={'sub','kappa','beta','bestModel'};
- writetable(cell2table([names;num2cell([noOutliers kappa beta bestModName'])]),outputFile,'writevariablenames',0)
+ writetable(cell2table([names;num2cell([noOutliers kappa beta bestMod'])]),outputFile,'writevariablenames',0)
 
 end
 % csvwrite(outputFile,[names;num2cell([noOutliers kappa beta])])
