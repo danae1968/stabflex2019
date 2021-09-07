@@ -12,7 +12,7 @@ io.projectDir='P:\3017048.04\stabflex2019';
 
 % enter 1 for analysing original experiment 1 and 2 for replication
 % experiment 2
-io.experiment=2;
+io.experiment=1;
 
 if io.experiment==1
     io.lost=4:7; %lost data files
@@ -24,7 +24,7 @@ end
 io.analysisDir=fullfile(io.projectDir,'code');
 addpath(io.analysisDir)
 
-io.saveD=0; %save output files
+io.saveD=1; %save output files
 io.doPlots=1; %do plots
 
 %Which tasks to analyse
@@ -32,6 +32,7 @@ todo.Colortest=0; % color sensitivity test
 todo.Colorwheel=0; % colorwheel working memory task performance
 todo.ChoiceNR=1; % choices task vs no effort
 todo.ChoiceD=0; % direct comparison choices (ignore vs update)
+todo. modeling=1; % modeling of the discounting curve 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1. Color sensitivity test performance analysis
@@ -110,3 +111,13 @@ if todo.ChoiceD
     
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4. Choices Ignore vs Update analysis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if todo.modeling
+     fprintf(1,[repmat('-',1,72),'\n'])
+    fprintf(1,'Running ''Running discount curve models'' \n')
+    
+     io.dataDir=fullfile(io.projectDir,'data','pooled');    
+
+    

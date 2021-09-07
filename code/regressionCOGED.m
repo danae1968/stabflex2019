@@ -82,13 +82,9 @@ for i=subNr
     
     
     %%%%% Plots %%%%   % horizontal line at y=0.5
-    lineX= 0:0.1:maxValue;
+    lineX= 0:0.1:maxValue+0.2;
     lineY =0.5 * ones(size(lineX));
-    
-    if doPlots
-        
-        % regression plots
-        xx = easyOffer;
+            xx = easyOffer;
         aI=unique([Ignore,yfitI],'rows');
         aU=unique([Update,yfitU],'rows');
         a1=unique([Isz1,yfit1],'rows');
@@ -101,53 +97,72 @@ for i=subNr
         a8=unique([Usz4, yfit8],'rows');
         bI=unique([Ignore,yI],'rows');
         bU=unique([Update,yU],'rows');
-        saI(loop,:)=aI(:,2)';saU(loop,:)=aU(:,2)';
-        msaI=mean(saI);msaU=mean(saU);
-        
-        
-        
-        figure;
-        hold all
-        plot(a1(:,1),a1(:,2),'m')
-        plot(a2(:,1),a2(:,2),'b')
-        plot(a3(:,1),a3(:,2),'r')
-        plot(a4(:,1),a4(:,2),'g')
-        
-        plot(lineX,lineY,'c')
-        scatter(Isz1,yI1,'m','jitter','on')
-        scatter(Isz2,yI2,'b','jitter','on')
-        scatter(Isz3,yI3,'r','jitter','on')
-        scatter(Isz4,yI4,'g','jitter','on')
-        ylabel('Probability of accepting No Redo');
-        xlabel('Offer for No Redo');
-        legend('Ignore 1','Ignore 2','Ignore 3','Ignore 4','Threshold','location','southeast')
-        title(sprintf('Probability of accepting No Redo for participant %d Ignore',i));
-        ylim([0 1])
-        xlim([minValue maxValue])
-        hold off
-        % saveas(gcf,sprintf('sub%dNRI',i),'bmp')
-        
-        figure;
-        hold all
-        plot(a5(:,1),a5(:,2),'m')
-        plot(a6(:,1),a6(:,2),'b')
-        plot(a7(:,1),a7(:,2),'r')
-        plot(a8(:,1),a8(:,2),'g')
-        
-        plot(lineX,lineY,'c')
-        scatter(Usz1,yU1,'m','jitter','on')
-        scatter(Usz2,yU2,'b','jitter','on')
-        scatter(Usz3,yU3,'r','jitter','on')
-        scatter(Usz4,yU4,'g','jitter','on')
-        ylabel('Probability of accepting No Redo');
-        xlabel('Offer for No Redo');
-        legend('Update 1','Update 2','Update 3','Update 4','Threshold','location','southeast')
-        title(sprintf('Probability of accepting No Redo for participant %d Update',i));
-        ylim([0 1])
-        xlim([minValue maxValue])
-        hold off
-        % saveas(gcf,sprintf('sub%dNRU',i),'bmp')
-    end
+        saI(loop,:)=aI(:,2)';saU(loop,:)=aU(:,2)';       
+             
+
+%     if doPlots
+%         
+%         % regression plots
+%         xx = easyOffer;
+%         aI=unique([Ignore,yfitI],'rows');
+%         aU=unique([Update,yfitU],'rows');
+%         a1=unique([Isz1,yfit1],'rows');
+%         a2=unique([Isz2, yfit2],'rows');
+%         a3=unique([Isz3, yfit3],'rows');
+%         a4=unique([Isz4, yfit4],'rows');
+%         a5=unique([Usz1,yfit5],'rows');
+%         a6=unique([Usz2, yfit6],'rows');
+%         a7=unique([Usz3, yfit7],'rows');
+%         a8=unique([Usz4, yfit8],'rows');
+%         bI=unique([Ignore,yI],'rows');
+%         bU=unique([Update,yU],'rows');
+%         saI(loop,:)=aI(:,2)';saU(loop,:)=aU(:,2)';
+%         msaI=mean(saI);msaU=mean(saU);
+%         
+%         
+%         
+%         figure;
+%         hold all
+%         plot(a1(:,1),a1(:,2),'m')
+%         plot(a2(:,1),a2(:,2),'b')
+%         plot(a3(:,1),a3(:,2),'r')
+%         plot(a4(:,1),a4(:,2),'g')
+%         
+%         plot(lineX,lineY,'c')
+%         scatter(Isz1,yI1,'m','jitter','on')
+%         scatter(Isz2,yI2,'b','jitter','on')
+%         scatter(Isz3,yI3,'r','jitter','on')
+%         scatter(Isz4,yI4,'g','jitter','on')
+%         ylabel('Probability of accepting No Redo');
+%         xlabel('Offer for No Redo');
+%         legend('Ignore 1','Ignore 2','Ignore 3','Ignore 4','Threshold','location','southeast')
+%         title(sprintf('Probability of accepting No Redo for participant %d Ignore',i));
+%         ylim([0 1])
+%         xlim([minValue maxValue])
+%         hold off
+%         % saveas(gcf,sprintf('sub%dNRI',i),'bmp')
+%         
+%         figure;
+%         hold all
+%         plot(a5(:,1),a5(:,2),'m')
+%         plot(a6(:,1),a6(:,2),'b')
+%         plot(a7(:,1),a7(:,2),'r')
+%         plot(a8(:,1),a8(:,2),'g')
+%         
+%         plot(lineX,lineY,'c')
+%         scatter(Usz1,yU1,'m','jitter','on')
+%         scatter(Usz2,yU2,'b','jitter','on')
+%         scatter(Usz3,yU3,'r','jitter','on')
+%         scatter(Usz4,yU4,'g','jitter','on')
+%         ylabel('Probability of accepting No Redo');
+%         xlabel('Offer for No Redo');
+%         legend('Update 1','Update 2','Update 3','Update 4','Threshold','location','southeast')
+%         title(sprintf('Probability of accepting No Redo for participant %d Update',i));
+%         ylim([0 1])
+%         xlim([minValue maxValue])
+%         hold off
+%         % saveas(gcf,sprintf('sub%dNRU',i),'bmp')
+%     end
     loop=loop+1;
 end %for i =subNr
 %% matrices
@@ -181,25 +196,38 @@ outliers=[outliers;noIPRows(:,1)];
 
 %% plots
 if doPlots
-    
+    saIout=(saI(~ismember(subNr,outliers),:));
+    saUout=(saU(~ismember(subNr,outliers),:));
+      msaI=mean(saIout);msaU=mean(saUout);
+se_I=std(saIout)/sqrt(length(saIout));        
+se_U=std(saUout)/sqrt(length(saUout)); 
+
     figure;
     hold all
-    plot(aI(:,1),msaI,'m')
+%     plot(aI(:,1),msaI,'m')
+strI = '#004CBF';
+colorI = sscanf(strI(2:end),'%2x%2x%2x',[1 3])/255;
+strU = '#E90066';
+colorU = sscanf(strU(2:end),'%2x%2x%2x',[1 3])/255;
+    errorbar(aI(:,1),msaI,se_I/2,'Color',colorI)
 %     scatter(aI(:,1),aI,'m','jitter','on')
-    
-    plot(aU(:,1),msaU,'g')
+    errorbar(aU(:,1),msaU,se_U/2,'Color',colorU)
+%     plot(aU(:,1),msaU,'g')
     ylabel('Probability of accepting No Redo');
     xlabel('Offer for No Redo');
     ylim([0 1])
-    xlim([minValue maxValue])
+    xlim([0 maxValue+0.2])
+    xticks([0.2:0.2:2.2])
     plot(lineX,lineY,'--k')
     h = zeros(2, 1);
-    h(1) = plot(NaN,NaN,'m');
-    h(2) = plot(NaN,NaN,'g');
+    h(1) = plot(NaN,NaN,'Color',colorI);
+    h(2) = plot(NaN,NaN,'Color',colorU);
     legend(h, 'Ignore','Update');
     hold off
+saveas(gcf,fullfile(io.resultsDir,sprintf('discCurves.pdf')),'pdf')
     
 end
+    IPfin=[subNr' IPmatrixAll];
 
 if saveD
     
@@ -208,7 +236,6 @@ if saveD
     names={'subNo' 'I' 'U' 'I1' 'I2' 'I3' 'I4' 'U1' 'U2' 'U3' 'U4' };
     namesTask={'subNo' 'SVtask'};
     
-    IPfin=[subNr' IPmatrixAll];
     IPtaskFin=[subNr' IPtask'];
     
     writetable(cell2table([num2cell(names);num2cell(IPfin)]),filename,'writevariablenames',0)
