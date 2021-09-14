@@ -1,10 +1,16 @@
+function  modelingAnal(io,cond)
+
 filename='P:\3017048.04\stabflex2019\results\Pooled\modelsCompOut.mat';
 filenameCond='P:\3017048.04\stabflex2019\results\Pooled\modelsCompCond.mat';
 devI_U=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','G2:G75');
 noOutliers=xlsread('P:\3017048.04\stabflex2019\results\Pooled\correlationsIPsPooled.csv','A2:A75');
 %cond=0 for modelling across ignore update conditions, cond=1 for modeling
 %them separately
+if io.condNum==2
 cond=1;
+elseif io.condNum==1
+    cond=0;
+end
 filenameDir='P:\3017048.04\stabflex2019\results\Pooled\directPooled.csv';
 direct=readtable(filenameDir);
 

@@ -128,7 +128,7 @@ io.noOutliers=xlsread(fullfile(io.resultsDir,'correlationsIPsPooled.csv','A2:A75
 
 %ensure different subNo for the two experiments
 io.data1(:,1)=io.data1(:,1)+100;
-io.data=[io.data1 ;io.data2];
+io.data=[io.data1 ;data2];
 io.condNum = 2; %number of conditions: 2 if separate for ignore/update, 1 if modelling is ran across conditions
 mod = modelscriptTrevor(io);
 modelingAnal(io)

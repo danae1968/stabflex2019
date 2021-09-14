@@ -11,15 +11,10 @@ function dataSim = simulations(io,mod)
 saveDir=fullfile(resultsDir,'simulatedData.mat');
 
 tic
-%extracted parameters from all models
-for n=1:length(io.modNames)
-    useMod=io.modNames{n};
-if any(strcmp(useMod,mod.model_names))
-discountI.(useMod) = mod.params(:,find(strcmp(mod.model_names,useMod)),1);
-discountU.(useMod) = mod.params(:,find(strcmp(mod.model_names,useMod)),2);
-end
-end
+%extracted parameters from hyperbolic model
 
+discountI=params.kappa_I;
+discountU=params.kappa_U;
 betaI=params.beta_I;
 betaU=params.beta_U;
 %experiment parameters
@@ -84,4 +79,3 @@ io.subNo=1:[Nsubs*io.numSims];
 time2=toc
 [ipmat]=regressionCOGED(dataSim,perRedo,io);
 time3=toc
-end
