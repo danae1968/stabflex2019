@@ -9,9 +9,9 @@ io=struct();
 
 % here add directory in which files were saved
 if isunix   
-projectDir = '/project/3017048.04';
+io.projectDir = '/project/3017048.04';
 elseif ispc
-    projectDir = 'M:\project\colorwheel\stabflex2019';
+    io.projectDir = 'M:\project\colorwheel\stabflex2019';
 end
 
 % enter 1 for analysing original experiment 1 and 2 for replication
@@ -34,9 +34,9 @@ io.doPlots=1; %do plots
 %Which tasks to analyse
 todo. Colortest = 0; % color sensitivity test
 todo. Colorwheel = 0; % colorwheel working memory task performance
-todo. ChoiceNR = 1; % choices task vs no effort
+todo. ChoiceNR = 0; % choices task vs no effort
 todo. ChoiceD = 0; % direct comparison choices (ignore vs update)
-todo. modeling = 1; % modeling of the discounting curve 
+todo. modeling = 0; % modeling of the discounting curve 
 todo. simulations = 1; 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,39 +119,33 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if todo.modeling
      fprintf(1,[repmat('-',1,72),'\n'])
-    fprintf(1,'Running ''Running discount curve models'' \n')
+    fprintf(1,'Running ''Discount curve modeling'' \n')
     
-io.data2=csvread(fullfile(projectDir,'results', 'Experiment2', 'COGED' ,'choicesRNR.csv')); %experiment 2 data
-io.data1=csvread(fullfile(projectDir,'results' ,'Experiment1','COGED' ,'choicesRNR.csv')); %experiment 1 data
-io.resultsDir=fullfile(projectDir,'results', 'Pooled');
-io.noOutliers=xlsread(fullfile(io.resultsDir,'correlationsIPsPooled.csv','A2:A75')); %retrieve only included subNo from both studies
+io.data2=csvread(fullfile(io.projectDir,'results', 'Experiment2', 'COGED' ,'choicesRNR.csv')); %experiment 2 data
+io.data1=csvread(fullfile(io.projectDir,'results' ,'Experiment1','COGED' ,'choicesRNR.csv')); %experiment 1 data
+io.resultsDir=fullfile(io.projectDir,'results', 'Pooled');
+io.subNr=xlsread(fullfile(io.resultsDir,'correlationsIPsPooled.csv'),'A2:A75'); %retrieve only included subNo from both studies
 
 %ensure different subNo for the two experiments
 io.data1(:,1)=io.data1(:,1)+100;
 io.data=[io.data1 ;io.data2];
 io.condNum = 2; %number of conditions: 2 if separate for ignore/update, 1 if modelling is ran across conditions
-mod = modelscriptTrevor(io);
-modelingAnal(io)
+io.condNames = {'across', 'ignore','update'}; %perform modelling for each condition or across
+model_results = modelscriptTrevor(io);
+modelingAnal(io, model_results)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. Simulations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if todo.modeling
+if todo.simulations
      fprintf(1,[repmat('-',1,72),'\n'])
-    fprintf(1,'Running ''Running simulations for discount curve models'' \n')
-end
-io.dataDir=fullfile(projectDir,'results','Pooled');
+    fprintf(1,'Running ''Simulations for discount curve modeling'' \n')
+
+io.dataDir=fullfile(io.projectDir,'results','Pooled');
 io.resultsDir=fullfile(io.dataDir,'simulations');
-io.numSims = 100; %number of simulations
+io.numSims = 1; %number of simulations
 io.modNames = {'parabolic','linear','hyperbolic','exponential'};
 %run simulations
-dataSimulated = simulations(io,mod);
-if todo.modeling
-     fprintf(1,[repmat('-',1,72),'\n'])
-    fprintf(1,'Running ''Running parameter recovery for discount curve models'' \n')
-%parameter recovery
-io.data = dataSimulated;
-modelscriptTrevor(io)
+dataSimulated = simulations(io);
 end
-    

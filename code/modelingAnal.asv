@@ -2,9 +2,9 @@ function  modelingAnal(io,varargin)
 
 switch nargin
     case 2
-        model_results =varargin{1};
+        varargin{2}
     case 1
-        filename=fullfile(io.resultsDir,'modelsCompNorm.mat');
+        filename=fullfile(io.resultsDir,'modelsCompCondNorm.mat');
         load(filename,'model_results');
 end
 
@@ -80,17 +80,17 @@ preference(ismember(noOutliers,prefU))=2;
 %% save data
 
 if io.saveD
-    outputFile=fullfile(io.resultsDir,'discParamsN.csv');
-    outputFileOut=fullfile(io.resultsDir,'discParamsNOut.csv');
+    outputFile='P:\3017048.04\stabflex2019\results\Pooled\discParamsCondFin.csv';
+    outputFileOut='P:\3017048.04\stabflex2019\results\Pooled\discParamsCondFinOutl.csv';
     
     names={'sub','kappa','kappa_I','kappa_U','beta','beta_I','beta_U','bestModel','preference'};
+    paramMat=[noOutliers kappa beta];
     writetable(cell2table([names;num2cell([noOutliers kappa beta bestMod' preference])]),outputFile,'writevariablenames',0)
     
-    paramMat=[noOutliers kappa beta];
     [outliers,paramOut]=findOutliers(paramMat(paramMat(:,1)~=46,:));outliers=[outliers;46]; %add participant who pressed only 1 button in outliers and estimate outliers without them
     
     if ~isempty(outliers)
-        writetable(cell2table([names(1:end-2);num2cell(paramOut)]),outputFileOut,'writevariablenames',0)
+        writetable(cell2table([names;num2cell(paramOut)]),outputFileOut,'writevariablenames',0)
     end
     
 end

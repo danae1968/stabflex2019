@@ -1,26 +1,37 @@
-function dataSim = simulations(io,mod)
-% if isunix   
-% projectDir = '/project/3017048.04';
-% elseif ispc
-%     projectDir = 'P:\3017048.04';
-% end
+function dataSim = simulations(io,varargin)
 
-% mod=load(fullfile(projectDir,'stabflex2019','results','Pooled','modelsCompCondOut.mat'));
-% params=readtable(fullfile(projectDir,'stabflex2019','results','Pooled','discParamsCond.csv'));
+switch nargin
+    case 2
+        model_results =varargin{1};
+    case 1
+        filename=fullfile(fileparts(io.resultsDir),'modelsCompNorm.mat');
+        load(filename,'model_results');
+end
 
-saveDir=fullfile(resultsDir,'simulatedData.mat');
+saveDir=fullfile(io.resultsDir,'simulatedDataN.mat');
 
 tic
-%extracted parameters from hyperbolic model
+%extracted parameters from all models
+for n=1:length(io.modNames)
+    useMod=io.modNames{n};
+    for sub=1:length(model_results.params)
+if any(strcmp(useMod,model_results.model_names))
+discountTask(sub).(useMod) = [model_results.params{sub,find(strcmp(model_results.model_names,useMod)),1}(1)]; %discounting factor kappa is the first parameter in matrix
+discountI(sub).(useMod) = [model_results.params{sub,find(strcmp(model_results.model_names,useMod)),2}(1)];
+discountU(sub).(useMod) = [model_results.params{sub,find(strcmp(model_results.model_names,useMod)),3}(1)];
 
-discountI=params.kappa_I;
-discountU=params.kappa_U;
-betaI=params.beta_I;
-betaU=params.beta_U;
+betaTask(sub).(useMod) = model_results.params{sub,find(strcmp(model_results.model_names,useMod)),1}(2); %inverse temperature beta is the second parameter
+betaI(sub).(useMod) = model_results.params{sub,find(strcmp(model_results.model_names,useMod)),2}(2);
+betaU(sub).(useMod) = model_results.params{sub,find(strcmp(model_results.model_names,useMod)),3}(2);
+end
+    end
+end
+
+mod= load(filename,'rewardEasy','effort','rewardHard','dataN'); %load parameters from modelling
 %experiment parameters
 sub=params.sub;
 setSize=unique(mod.effort); %number of squares
-easyOffers=unique(mod.offer); %offers for easy (no effort)
+easyOffers=unique(mod.rewardEasy); %offers for easy (no effort)
 hardOffer=2;
 numReps=3; %repetitions of each pair of offers
 cond=[0 2]; %conditions(ignore update)
@@ -79,3 +90,4 @@ io.subNo=1:[Nsubs*io.numSims];
 time2=toc
 [ipmat]=regressionCOGED(dataSim,perRedo,io);
 time3=toc
+end
